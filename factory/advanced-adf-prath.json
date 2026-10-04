@@ -1,0 +1,15 @@
+{
+	"name": "advanced-adf-prath",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "179b7399-3669-4c41-ae36-91060c1d0984",
+		"tenantId": "a3724ec7-e087-47dc-8582-b326d000d8f8"
+	}
+}
