@@ -1,6 +1,24 @@
 {
 	"name": "Ingestion",
 	"properties": {
+		"parameters": {
+			"schema": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"table": {
+				"type": "string",
+				"defaultValue": "customers"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "sink"
+			},
+			"folder": {
+				"type": "string",
+				"defaultValue": "tables"
+			}
+		},
 		"annotations": []
 	}
 }
