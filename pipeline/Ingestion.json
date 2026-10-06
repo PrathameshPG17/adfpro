@@ -46,8 +46,14 @@
 						"referenceName": "ds_database",
 						"type": "DatasetReference",
 						"parameters": {
-							"schema": "dbo",
-							"table": "customers"
+							"schema": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"table": {
+								"value": "@pipeline().parameters.table",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -56,9 +62,18 @@
 						"referenceName": "ds_datalake",
 						"type": "DatasetReference",
 						"parameters": {
-							"container": "sink",
-							"folder": "tables",
-							"table": "customers.csv"
+							"container": {
+								"value": "@pipeline().parameters.container",
+								"type": "Expression"
+							},
+							"folder": {
+								"value": "@pipeline().parameters.folder",
+								"type": "Expression"
+							},
+							"table": {
+								"value": "@pipeline().parameters.table",
+								"type": "Expression"
+							}
 						}
 					}
 				]
