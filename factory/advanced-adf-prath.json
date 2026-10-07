@@ -1,6 +1,12 @@
 {
 	"name": "advanced-adf-prath",
 	"properties": {
+		"globalParameters": {
+			"email": {
+				"type": "string",
+				"value": "prathameshpg17@gmail.com"
+			}
+		},
 		"trustModeClaimForMi": {
 			"value": "Disabled",
 			"editable": true
