@@ -25,7 +25,7 @@
 					"method": "POST",
 					"url": "https://prod-14.centralindia.logic.azure.com:443/workflows/8ff7fef8241a4180906df04e59dc5030/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=tfzrQHvaa5YXXuzYw58-KM0GHICnka1mh0EE-O7BQvU",
 					"body": {
-						"value": "{\n\"email_recipient\":\"@{pipeline().parameters.email_recipient}\",\n\"subject\":\"Customers - Sucess\",\n\"body\":\"the table customers has been ingested sucessfullly\"\n}",
+						"value": "@variables('logic_apps_body')",
 						"type": "Expression"
 					}
 				}
