@@ -88,8 +88,6 @@
 			{
 				"name": "Execute Pipeline1 - sucess",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Read Watermark",
@@ -217,7 +215,7 @@
 						{
 							"type": "Query",
 							"text": {
-								"value": "update metadata.table_watermarks set watermark_value=sysutcdatetime() where table_name = @{pipeline().parameters.table}",
+								"value": "update metadata.table_watermarks set watermark_value=sysutcdatetime() where table_name = @{toLower(pipeline().parameters.table)}",
 								"type": "Expression"
 							}
 						}
