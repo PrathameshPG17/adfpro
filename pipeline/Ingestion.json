@@ -25,7 +25,7 @@
 					"source": {
 						"type": "AzureSqlSource",
 						"sqlReaderQuery": {
-							"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where watermark_value>'activity('Read watermarks').output.firstRow.watermark_value'",
+							"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where watermark_value>'@{activity('Read watermarks').output.firstRow.watermark_value}'",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
@@ -75,10 +75,6 @@
 						"parameters": {
 							"container": {
 								"value": "@pipeline().parameters.container",
-								"type": "Expression"
-							},
-							"folder": {
-								"value": "@pipeline().parameters.table",
 								"type": "Expression"
 							},
 							"table": {
@@ -242,10 +238,6 @@
 			"container": {
 				"type": "string",
 				"defaultValue": "sink"
-			},
-			"folder": {
-				"type": "string",
-				"defaultValue": "tables"
 			}
 		},
 		"annotations": []

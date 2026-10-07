@@ -10,9 +10,6 @@
 				"type": "string",
 				"defaultValue": "sink"
 			},
-			"folder": {
-				"type": "string"
-			},
 			"table": {
 				"type": "string"
 			}
@@ -23,7 +20,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": {
-					"value": "@dataset().folder",
+					"value": "@dataset().table",
 					"type": "Expression"
 				},
 				"fileSystem": {
