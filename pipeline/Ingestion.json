@@ -79,7 +79,7 @@
 				]
 			},
 			{
-				"name": "Execute Pipeline1",
+				"name": "Execute Pipeline1 - sucess",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -103,7 +103,40 @@
 						"table_name": {
 							"value": "@pipeline().parameters.table",
 							"type": "Expression"
-						}
+						},
+						"status": "Success",
+						"email_recipient": "prathameshpg17@gmail.com"
+					}
+				}
+			},
+			{
+				"name": "Execute Pipeline1_copy1 - fail",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Email",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": false,
+					"parameters": {
+						"table_name": {
+							"value": "@pipeline().parameters.table",
+							"type": "Expression"
+						},
+						"status": "Fail",
+						"email_recipient": "prathameshpg17@gmail.com"
 					}
 				}
 			}
