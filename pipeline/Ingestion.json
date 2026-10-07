@@ -3,9 +3,16 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Read Watermark",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Read watermarks",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -17,6 +24,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select * from @{pipeline().parameters.schema}.@{pipeline().parameters.table} where watermark_value>'activity('Read watermarks').output.firstRow.watermark_value'",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -67,11 +78,11 @@
 								"type": "Expression"
 							},
 							"folder": {
-								"value": "@pipeline().parameters.folder",
+								"value": "@pipeline().parameters.table",
 								"type": "Expression"
 							},
 							"table": {
-								"value": "@pipeline().parameters.table",
+								"value": "@concat(pipeline().parameters.table,'_',utcNow())",
 								"type": "Expression"
 							}
 						}
@@ -81,9 +92,11 @@
 			{
 				"name": "Execute Pipeline1 - sucess",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "Read Watermark",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -105,16 +118,21 @@
 							"type": "Expression"
 						},
 						"status": "Success",
-						"email_recipient": "prathameshpg17@gmail.com"
+						"email_recipient": {
+							"value": "@pipeline().globalParameters.email",
+							"type": "Expression"
+						}
 					}
 				}
 			},
 			{
 				"name": "Execute Pipeline1_copy1 - fail",
 				"type": "ExecutePipeline",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "Copy data1",
+						"activity": "Read Watermark",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -136,8 +154,79 @@
 							"type": "Expression"
 						},
 						"status": "Fail",
-						"email_recipient": "prathameshpg17@gmail.com"
+						"email_recipient": {
+							"value": "@pipeline().globalParameters.email",
+							"type": "Expression"
+						}
 					}
+				}
+			},
+			{
+				"name": "Read watermarks",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select watermark_value from metadata.table_watermarks where table_name = '@{toLower(pipeline().parameters.table)}';",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_database",
+						"type": "DatasetReference",
+						"parameters": {
+							"schema": "testt",
+							"table": "resss"
+						}
+					}
+				}
+			},
+			{
+				"name": "update watermark",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Read Watermark",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_database",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "update metadata.table_watermarks set watermark_value=sysutcdatetime() where table_name = @{pipeline().parameters.table}",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			}
 		],
